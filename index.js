@@ -1,0 +1,39 @@
+const express = require("express")
+const mongoose = require("mongoose"); 
+const { MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT } = require("./config/config");
+
+
+const postRouter = require("./routes/postRoutes")
+const userRouter = require("./routes/userRoutes")
+
+const app = express()
+const mongoURL = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`
+
+const connectWithRetry = () =>{
+    mongoose
+    .connect(mongoURL, {
+        useNewURLParser: true,
+        useUnifiedTopology: true
+    })
+    .then(()=> console.log("Successfully connect to DB"))
+    .catch((e)=> {
+        console.log(e)
+        setTimeout(connectWithRetry, 5000)
+    })
+}
+
+connectWithRetry()
+
+app.use(express.json()) // MIDDLEWARE: this makes sure json body of post will be attatched to express object 
+
+
+app.get("/", (req, res) => {
+    res.send("<h2>Hi There Guy!!</h2>")
+})
+
+//localhost:3000/api/v1/posts -- this will send to our post router and we will be left with / (as in our postRoutes.js)
+app.use("/api/v1/posts", postRouter)
+app.use("/api/v1/users", userRouter)
+const port = process.env.PORT || 3000; 
+
+app.listen(port, () => console.log(`listening on port ${port}`))
