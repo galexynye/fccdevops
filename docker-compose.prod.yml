@@ -1,5 +1,8 @@
 version: "3"
 services: 
+  nginx:
+    ports: 
+      - "80:80" # 80 is the port nginx is listening on. 3000 is the 
   node-app:
     build: 
       context: .

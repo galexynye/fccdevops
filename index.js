@@ -47,7 +47,7 @@ app.use(session({ // configure express session
     cookie: { // defined in express-session npm
         secure: false, // in development false and production true. means only works with HTTPs
         httpOnly: true,
-        maxAge: 3000000,// we will use for how long user stays logged on
+        maxAge: 30000,// we will use for how long user stays logged on
     }
 }))
 
@@ -55,7 +55,7 @@ app.use(session({ // configure express session
 app.use(express.json()) // MIDDLEWARE: this makes sure json body of post will be attatched to express object 
 
 
-app.get("/", (req, res) => {
+app.get("/api/v1", (req, res) => {
     res.send("<h2>Hi There Guy!!</h2>")
 })
 

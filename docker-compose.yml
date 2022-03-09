@@ -1,20 +1,26 @@
-version: "3"
+version: "3" # version of docker compose
 services:
+  nginx:
+    image: nginx:stable-alpine   
+    ports: 
+      - "3000:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro  # on left ./ = working directory. then we get the nginx config file. on right, that's where nginx excpects config file to be. the ":ro" at the end means read only..IMPORTANT. Don't want someone to change this.
   node-app:
     build: . 
-    ports: 
-      - "3000:3000"
+    # ports:  # don't need ports hwen using nginx as load balancer 
+    #   - "3000:3000"
     environment:
       - PORT=3000      
-    depends_on:
+    depends_on: # means that the other service MUST be running 
       - mongo
   mongo:
     image: mongo 
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=alex
+      - MONGO_INITDB_ROOT_USERNAME=alex # necessary environment variables. info about why needed is docker hub about this image. 
       - MONGO_INITDB_ROOT_PASSWORD=mypassword
     volumes:
-      - mongo-db-fcc:/data/db
+      - mongo-db-fcc:/data/db  # named data mapping. before the ":" is the name of the volume. after is the location of the data we want to persist
   redis: 
     image: redis 
 volumes: 
