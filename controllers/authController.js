@@ -10,6 +10,8 @@ exports.signUp = async (req, res) => {
             username, 
             password: hashpassword
         })
+
+        req.session.user = newUser 
         res.status(201).json({
             status: "success",
             data: {
@@ -38,6 +40,7 @@ exports.login = async (req, res) => {
         const isCorrect = await bcrypt.compare(password, user.password) // checks password inputed matched the hashed password on the database
 
         if(isCorrect){
+            req.session.user = user // session object is attatched to request object. (inside the request we have the cookie and automagically get it with the middleware) https://www.npmjs.com/package/express-session/v/1.17.2
             res.status(200).json({
                 status: 'success'
             })

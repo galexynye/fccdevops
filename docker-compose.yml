@@ -15,5 +15,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=mypassword
     volumes:
       - mongo-db-fcc:/data/db
+  redis: 
+    image: redis 
 volumes: 
   mongo-db-fcc:
