@@ -2,6 +2,7 @@ const express = require("express")
 const mongoose = require("mongoose"); 
 const session = require("express-session")
 const redis = require("redis")
+const cors = require("cors")
 let RedisStore = require("connect-redis")(session)
 
 
@@ -39,6 +40,13 @@ const connectWithRetry = () =>{
 
 connectWithRetry()
 
+// Middleware section 
+// Middleware section 
+
+app.enable("trust proxy") // necessary when using with NGINX 
+
+app.use(cors({}))
+
 app.use(session({ // configure express session 
     store: new RedisStore({client: redisClient}), // adds Redis middle ware, to store session info
     secret: SESSION_SECRET, // random secret on our express server (as environment variable). lets us connect to session data   
@@ -55,13 +63,17 @@ app.use(session({ // configure express session
 app.use(express.json()) // MIDDLEWARE: this makes sure json body of post will be attatched to express object 
 
 
-app.get("/api/v1", (req, res) => {
+app.get("/api/v1", (req, res) => { // test to make sure working
+    
     res.send("<h2>Hi There Guy!!</h2>")
+    console.log("yeah it works ")
 })
 
+
+// Routes 
 //localhost:3000/api/v1/posts -- this will send to our post router and we will be left with / (as in our postRoutes.js)
 app.use("/api/v1/posts", postRouter)
 app.use("/api/v1/users", userRouter)
-const port = process.env.PORT || 3000; 
 
+const port = process.env.PORT || 3000; 
 app.listen(port, () => console.log(`listening on port ${port}`))
