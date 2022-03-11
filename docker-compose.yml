@@ -8,6 +8,7 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro  # on left ./ = working directory. then we get the nginx config file. on right, that's where nginx excpects config file to be. the ":ro" at the end means read only..IMPORTANT. Don't want someone to change this.
   node-app:
     build: . 
+    image: galexynye/node-app
     # ports:  # don't need ports hwen using nginx as load balancer 
     #   - "3000:3000"
     environment:
