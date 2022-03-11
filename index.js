@@ -65,7 +65,7 @@ app.use(express.json()) // MIDDLEWARE: this makes sure json body of post will be
 
 app.get("/api/v1", (req, res) => { // test to make sure working
     
-    res.send("<h2>Hi There Guy!!!!!!</h2>")
+    res.send("<h2>Hi There Guy</h2>")
     console.log("yeah it works ")
 })
 
